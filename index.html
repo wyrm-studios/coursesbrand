@@ -1,1 +1,415 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Presentation - كن رقم واحد</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Mobile Warning Banner */
+        .mobile-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            padding: 40px 20px;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .mobile-warning.show {
+            display: flex;
+        }
+
+        .mobile-warning-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            color: #DC2626;
+        }
+
+        .mobile-warning h2 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .mobile-warning p {
+            color: #999;
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 500px;
+        }
+
+        .mobile-warning .highlight {
+            color: #2563EB;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .presentation-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 42px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .slogan {
+            color: #2563EB;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* Video Section */
+        .video-section {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            position: relative;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+
+        .video-section.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Transition Message */
+        .transition-message {
+            text-align: center;
+            color: #2563EB;
+            font-size: 20px;
+            margin: 30px 0;
+            opacity: 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* PDF Section */
+        .pdf-section {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+            display: none;
+        }
+
+        .pdf-section.show {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .pdf-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pdf-header h2 {
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .pdf-header p {
+            color: #999;
+            font-size: 16px;
+        }
+
+        .pdf-container {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 1200px;
+            border: none;
+        }
+
+        .pdf-scroll-hint {
+            text-align: center;
+            color: #2563EB;
+            padding: 20px;
+            background: rgba(37, 99, 235, 0.1);
+            animation: bounce 2s infinite;
+        }
+
+        .pdf-scroll-hint span {
+            display: inline-block;
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .header .slogan {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-warning.show {
+                display: flex !important;
+            }
+            
+            .presentation-container {
+                display: none;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0A0A0A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(37, 99, 235, 0.3);
+            border-top-color: #2563EB;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Mobile Warning -->
+    <div class="mobile-warning" id="mobileWarning">
+        <div class="mobile-warning-icon">📱</div>
+        <h2>يرجى استخدام جهاز كمبيوتر</h2>
+        <p>
+            هذه العرض التقديمي مصمم خصيصاً للعرض على <span class="highlight">شاشة الكمبيوتر</span><br>
+            للحصول على أفضل تجربة، يرجى التبديل إلى <span class="highlight">لابتوب أو ديسكتوب</span>
+        </p>
+    </div>
+
+    <!-- Main Presentation -->
+    <div class="presentation-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>عرض العلامة التجارية</h1>
+            <div class="slogan">كن رقم واحد في عصر الذكاء الاصطناعي</div>
+        </div>
+
+        <!-- Video Section -->
+        <div class="video-section" id="videoSection">
+            <div class="video-wrapper">
+                <iframe 
+                    src="https://player.vimeo.com/video/1196801056?autoplay=1&muted=0&title=0&byline=0&portrait=0&controls=1" 
+                    allow="autoplay; fullscreen; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Transition Message -->
+        <div class="transition-message" id="transitionMsg" style="display: none;">
+            جاري تحميل دليل العلامة التجارية...
+        </div>
+
+        <!-- PDF Section -->
+        <div class="pdf-section" id="pdfSection">
+            <div class="pdf-header">
+                <h2>دليل العلامة التجارية الكامل</h2>
+                <p>اضغط على PDF أو استخدم التمرير للأسفل لاستكشاف جميع التفاصيل</p>
+            </div>
+            <div class="pdf-container">
+                <div class="pdf-scroll-hint">
+                    استخدم التمرير للأسفل لاستكشاف الدليل
+                    <span>↓</span>
+                </div>
+                <iframe 
+                    src="pdf.pdf" 
+                    class="pdf-viewer"
+                    id="pdfViewer">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Detect Mobile Device
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   window.innerWidth <= 768;
+        }
+
+        // Show mobile warning if needed
+        if (isMobile()) {
+            document.getElementById('mobileWarning').classList.add('show');
+        }
+
+        // Hide loading screen
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading').classList.add('hide');
+            }, 500);
+        });
+
+        // Vimeo Video Ended Handler
+        var iframe = document.querySelector('.video-wrapper iframe');
+        var videoSection = document.getElementById('videoSection');
+        var transitionMsg = document.getElementById('transitionMsg');
+        var pdfSection = document.getElementById('pdfSection');
+
+        // Listen for Vimeo messages
+        window.addEventListener('message', function(e) {
+            if (e.origin.indexOf('vimeo') > -1) {
+                var data = e.data;
+                if (data.event === 'ended') {
+                    onVideoEnded();
+                }
+            }
+        }, false);
+
+        // Fallback: Auto-transition after video duration + buffer
+        setTimeout(function() {
+            if (!videoSection.classList.contains('hide')) {
+                onVideoEnded();
+            }
+        }, 15000); // 15 seconds (11s video + 4s buffer)
+
+        function onVideoEnded() {
+            // Hide video
+            videoSection.classList.add('hide');
+            
+            // Show transition message
+            transitionMsg.style.display = 'block';
+            
+            // Show PDF after brief delay
+            setTimeout(function() {
+                transitionMsg.style.display = 'none';
+                pdfSection.classList.add('show');
+                
+                // Smooth scroll to PDF
+                pdfSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 1500);
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Console log for debugging
+        console.log('Presentation loaded successfully');
+        console.log('Video: https://vimeo.com/1196801056');
+        console.log('Duration: 11 seconds');
+    </script>
+</body>
+</html>
