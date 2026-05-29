@@ -105,6 +105,7 @@
         .video-section.hide {
             opacity: 0;
             pointer-events: none;
+            display: none;
         }
 
         .video-wrapper {
@@ -126,6 +127,95 @@
             border: none;
         }
 
+        /* Control Buttons Container */
+        .video-controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Start Video Button */
+        .btn-start {
+            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+            color: #fff;
+            border: none;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn-start:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-start.playing {
+            display: none;
+        }
+
+        /* Show PDF Button (initially hidden) */
+        .btn-show-pdf {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+            color: #fff;
+            border: none;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+            font-family: 'Tajawal', sans-serif;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.8);
+        }
+
+        .btn-show-pdf.show {
+            opacity: 1;
+            pointer-events: all;
+            transform: scale(1);
+        }
+
+        .btn-show-pdf:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(220, 38, 38, 0.6);
+        }
+
+        .btn-show-pdf:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* Video Status Indicator */
+        .video-status {
+            text-align: center;
+            color: #2563EB;
+            font-size: 16px;
+            margin-top: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-status.show {
+            opacity: 1;
+        }
+
+        .video-status.playing {
+            color: #10B981;
+        }
+
         /* Transition Message */
         .transition-message {
             text-align: center;
@@ -134,6 +224,7 @@
             margin: 30px 0;
             opacity: 0;
             animation: fadeIn 0.5s ease;
+            display: none;
         }
 
         /* PDF Section */
@@ -228,6 +319,12 @@
             .header .slogan {
                 font-size: 20px;
             }
+
+            .btn-start,
+            .btn-show-pdf {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -304,15 +401,31 @@
         <div class="video-section" id="videoSection">
             <div class="video-wrapper">
                 <iframe 
-                    src="https://player.vimeo.com/video/1196801056?autoplay=1&muted=0&title=0&byline=0&portrait=0&controls=1" 
-                    allow="autoplay; fullscreen; picture-in-picture" 
+                    id="vimeoPlayer"
+                    src="https://player.vimeo.com/video/1196801056?title=0&byline=0&portrait=0&controls=1&muted=0" 
+                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media" 
                     allowfullscreen>
                 </iframe>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="video-controls">
+                <button class="btn-start" id="btnStart">
+                    ▶ تشغيل الفيديو
+                </button>
+                <button class="btn-show-pdf" id="btnShowPdf">
+                    عرض الدليل الكامل ←
+                </button>
+            </div>
+
+            <!-- Status Text -->
+            <div class="video-status" id="videoStatus">
+                الفيديو جاهز للتشغيل
             </div>
         </div>
 
         <!-- Transition Message -->
-        <div class="transition-message" id="transitionMsg" style="display: none;">
+        <div class="transition-message" id="transitionMsg">
             جاري تحميل دليل العلامة التجارية...
         </div>
 
@@ -355,31 +468,41 @@
             }, 500);
         });
 
-        // Vimeo Video Ended Handler
-        var iframe = document.querySelector('.video-wrapper iframe');
-        var videoSection = document.getElementById('videoSection');
-        var transitionMsg = document.getElementById('transitionMsg');
-        var pdfSection = document.getElementById('pdfSection');
+        // Get elements
+        const btnStart = document.getElementById('btnStart');
+        const btnShowPdf = document.getElementById('btnShowPdf');
+        const videoSection = document.getElementById('videoSection');
+        const videoStatus = document.getElementById('videoStatus');
+        const transitionMsg = document.getElementById('transitionMsg');
+        const pdfSection = document.getElementById('pdfSection');
+        const vimeoPlayer = document.getElementById('vimeoPlayer');
 
-        // Listen for Vimeo messages
-        window.addEventListener('message', function(e) {
-            if (e.origin.indexOf('vimeo') > -1) {
-                var data = e.data;
-                if (data.event === 'ended') {
-                    onVideoEnded();
-                }
-            }
-        }, false);
+        let isVideoPlaying = false;
 
-        // Fallback: Auto-transition after video duration + buffer
-        setTimeout(function() {
-            if (!videoSection.classList.contains('hide')) {
-                onVideoEnded();
-            }
-        }, 15000); // 15 seconds (11s video + 4s buffer)
+        // Start Video Button Click
+        btnStart.addEventListener('click', function() {
+            // Hide start button
+            btnStart.classList.add('playing');
+            
+            // Update status
+            videoStatus.textContent = 'الفيديو يعمل الآن 🔊';
+            videoStatus.classList.add('show', 'playing');
+            
+            // Enable autoplay with sound by reloading iframe with autoplay parameter
+            const currentSrc = vimeoPlayer.src;
+            vimeoPlayer.src = currentSrc + '&autoplay=1';
+            
+            isVideoPlaying = true;
+            
+            // Show "Show PDF" button after 2 seconds
+            setTimeout(function() {
+                btnShowPdf.classList.add('show');
+            }, 2000);
+        });
 
-        function onVideoEnded() {
-            // Hide video
+        // Show PDF Button Click
+        btnShowPdf.addEventListener('click', function() {
+            // Hide video section
             videoSection.classList.add('hide');
             
             // Show transition message
@@ -393,7 +516,20 @@
                 // Smooth scroll to PDF
                 pdfSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 1500);
-        }
+        });
+
+        // Listen for Vimeo video end event
+        window.addEventListener('message', function(e) {
+            if (e.origin.indexOf('vimeo') > -1) {
+                var data = e.data;
+                if (data.event === 'ended' && isVideoPlaying) {
+                    // Video ended - automatically show PDF button prominently
+                    btnShowPdf.classList.add('show');
+                    videoStatus.textContent = 'انتهى الفيديو - اضغط لعرض الدليل';
+                    videoStatus.style.color = '#DC2626';
+                }
+            }
+        }, false);
 
         // Add smooth scroll behavior
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -409,7 +545,8 @@
         // Console log for debugging
         console.log('Presentation loaded successfully');
         console.log('Video: https://vimeo.com/1196801056');
-        console.log('Duration: 11 seconds');
+        console.log('Click "تشغيل الفيديو" to start with sound');
     </script>
+</body>
 </body>
 </html>
