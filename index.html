@@ -252,19 +252,19 @@
             vimeoPlayer.src = src.includes('autoplay') ? src : src + '&autoplay=1';
         });
 
-        // Listen for video end
+        // Listen for video end event from Vimeo
         window.addEventListener('message', function(e) {
             if (e.origin.indexOf('vimeo') > -1 && e.data.event === 'ended') {
                 btnShowPdf.classList.remove('hide');
             }
         }, false);
 
-        // Fallback: show button after 13 seconds (11s video + 2s buffer)
+        // Fallback: show button after 17 seconds (15s video + 2s buffer)
         setTimeout(() => {
             if (!btnShowPdf.classList.contains('show')) {
                 btnShowPdf.classList.remove('hide');
             }
-        }, 13000);
+        }, 17000); // UPDATED: 17 seconds for 15s video
 
         // Show PDF Button Click
         btnShowPdf.addEventListener('click', () => {
