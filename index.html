@@ -3,30 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brand Presentation - كن رقم واحد</title>
+    <title>Brand Identity</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+            font-family: 'Tajawal', sans-serif;
+            background: #0A0A0A;
+            color: #fff;
             min-height: 100vh;
-            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        /* Mobile Warning Banner */
+        /* Mobile Warning */
         .mobile-warning {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #0A0A0A;
             z-index: 10000;
             padding: 40px 20px;
             text-align: center;
@@ -34,519 +31,247 @@
             justify-content: center;
             flex-direction: column;
         }
-
-        .mobile-warning.show {
-            display: flex;
-        }
-
-        .mobile-warning-icon {
-            font-size: 80px;
-            margin-bottom: 30px;
-            color: #DC2626;
-        }
-
-        .mobile-warning h2 {
-            color: #fff;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .mobile-warning p {
-            color: #999;
-            font-size: 18px;
-            line-height: 1.8;
-            max-width: 500px;
-        }
-
-        .mobile-warning .highlight {
-            color: #2563EB;
-            font-weight: 600;
-        }
+        .mobile-warning.show { display: flex; }
+        .mobile-warning h2 { color: #DC2626; font-size: 24px; margin-bottom: 15px; }
+        .mobile-warning p { color: #999; font-size: 16px; line-height: 1.6; }
+        .mobile-warning .highlight { color: #2563EB; font-weight: 600; }
 
         /* Main Container */
-        .presentation-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            opacity: 0;
-            animation: fadeIn 1s ease forwards;
-        }
-
-        .header h1 {
-            color: #fff;
-            font-size: 42px;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header .slogan {
-            color: #2563EB;
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        /* Video Section */
-        .video-section {
+        .container {
             width: 100%;
-            max-width: 1200px;
-            margin: 0 auto 40px;
-            position: relative;
-            opacity: 1;
-            transition: opacity 1s ease;
+            max-width: 900px;
+            text-align: center;
         }
 
-        .video-section.hide {
+        /* Step 1: Intro Message */
+        .intro-step {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        .intro-step.hide {
             opacity: 0;
             pointer-events: none;
             display: none;
         }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 ratio */
-            height: 0;
-            overflow: hidden;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
-            background: #000;
+        .intro-step h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .intro-step p {
+            color: #999;
+            font-size: 16px;
+            margin-bottom: 30px;
         }
 
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Control Buttons Container */
-        .video-controls {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        /* Start Video Button */
-        .btn-start {
-            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #2563EB, #1E40AF);
             color: #fff;
             border: none;
-            padding: 18px 50px;
-            font-size: 20px;
+            padding: 16px 45px;
+            font-size: 18px;
             font-weight: 700;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
             font-family: 'Tajawal', sans-serif;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
         }
-
-        .btn-start:hover {
+        .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 40px rgba(37, 99, 235, 0.6);
         }
-
-        .btn-start:active {
-            transform: translateY(-1px);
-        }
-
-        .btn-start.playing {
-            display: none;
-        }
-
-        /* Show PDF Button (initially hidden) */
-        .btn-show-pdf {
-            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
-            color: #fff;
-            border: none;
-            padding: 18px 50px;
-            font-size: 20px;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .btn-red {
+            background: linear-gradient(135deg, #DC2626, #991B1B);
             box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
-            font-family: 'Tajawal', sans-serif;
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.8);
         }
-
-        .btn-show-pdf.show {
-            opacity: 1;
-            pointer-events: all;
-            transform: scale(1);
-        }
-
-        .btn-show-pdf:hover {
-            transform: translateY(-3px) scale(1.05);
+        .btn-red:hover {
             box-shadow: 0 15px 40px rgba(220, 38, 38, 0.6);
         }
+        .btn.hide { display: none; }
 
-        .btn-show-pdf:active {
-            transform: translateY(-1px) scale(1.02);
-        }
-
-        /* Video Status Indicator */
-        .video-status {
-            text-align: center;
-            color: #2563EB;
-            font-size: 16px;
-            margin-top: 15px;
+        /* Step 2: Video */
+        .video-step {
+            display: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.5s ease;
         }
-
-        .video-status.show {
+        .video-step.show {
+            display: block;
             opacity: 1;
         }
-
-        .video-status.playing {
-            color: #10B981;
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
+            margin-bottom: 25px;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
         }
 
-        /* Transition Message */
-        .transition-message {
-            text-align: center;
-            color: #2563EB;
-            font-size: 20px;
-            margin: 30px 0;
-            opacity: 0;
-            animation: fadeIn 0.5s ease;
+        /* Step 3: PDF */
+        .pdf-step {
             display: none;
-        }
-
-        /* PDF Section */
-        .pdf-section {
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s ease;
-            display: none;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
         }
-
-        .pdf-section.show {
+        .pdf-step.show {
+            display: block;
             opacity: 1;
             transform: translateY(0);
-            display: block;
         }
-
-        .pdf-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .pdf-header h2 {
-            color: #fff;
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .pdf-header p {
-            color: #999;
-            font-size: 16px;
-        }
-
         .pdf-container {
             background: #fff;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
-
         .pdf-viewer {
             width: 100%;
-            height: 1200px;
+            height: 1000px;
             border: none;
         }
-
-        .pdf-scroll-hint {
-            text-align: center;
+        .scroll-hint {
             color: #2563EB;
-            padding: 20px;
+            padding: 15px;
             background: rgba(37, 99, 235, 0.1);
-            animation: bounce 2s infinite;
+            font-size: 14px;
         }
 
-        .pdf-scroll-hint span {
-            display: inline-block;
-            font-size: 24px;
-            margin-top: 10px;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .header h1 {
-                font-size: 32px;
-            }
-            
-            .header .slogan {
-                font-size: 20px;
-            }
-
-            .btn-start,
-            .btn-show-pdf {
-                padding: 15px 40px;
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .mobile-warning.show {
-                display: flex !important;
-            }
-            
-            .presentation-container {
-                display: none;
-            }
-        }
-
-        /* Loading State */
+        /* Loading */
         .loading {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: #0A0A0A;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
         }
-
-        .loading.hide {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(37, 99, 235, 0.3);
+        .loading.hide { display: none; }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 3px solid rgba(37,99,235,0.3);
             border-top-color: #2563EB;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        @media (max-width: 768px) {
+            .mobile-warning.show { display: flex !important; }
+            .container { display: none; }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- Loading -->
     <div class="loading" id="loading">
-        <div class="loading-spinner"></div>
+        <div class="spinner"></div>
     </div>
 
     <!-- Mobile Warning -->
     <div class="mobile-warning" id="mobileWarning">
-        <div class="mobile-warning-icon">📱</div>
-        <h2>يرجى استخدام جهاز كمبيوتر</h2>
+        <h2>⚠️ يرجى استخدام كمبيوتر</h2>
         <p>
-            هذه العرض التقديمي مصمم خصيصاً للعرض على <span class="highlight">شاشة الكمبيوتر</span><br>
-            للحصول على أفضل تجربة، يرجى التبديل إلى <span class="highlight">لابتوب أو ديسكتوب</span>
+            هذا العرض مصمم لشاشة <span class="highlight">الكمبيوتر</span><br>
+            يرجى التبديل إلى لابتوب أو ديسكتوب
         </p>
     </div>
 
-    <!-- Main Presentation -->
-    <div class="presentation-container">
-        <!-- Header -->
-        <div class="header">
-            <h1>عرض العلامة التجارية</h1>
-            <div class="slogan">كن رقم واحد في عصر الذكاء الاصطناعي</div>
+    <!-- Main Content -->
+    <div class="container">
+        
+        <!-- Step 1: Intro -->
+        <div class="intro-step" id="introStep">
+            <h2>مقدمة الفيديو</h2>
+            <p>شاهد مقدمة قصيرة للتعرف على الهوية البصرية</p>
+            <button class="btn" id="btnWatch">▶ شاهد الفيديو</button>
         </div>
 
-        <!-- Video Section -->
-        <div class="video-section" id="videoSection">
+        <!-- Step 2: Video -->
+        <div class="video-step" id="videoStep">
             <div class="video-wrapper">
                 <iframe 
                     id="vimeoPlayer"
-                    src="https://vimeo.com/1196949125?title=0&byline=0&portrait=0&controls=1&muted=0" 
-                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media" 
+                    src="https://player.vimeo.com/video/1196949125?title=0&byline=0&portrait=0&controls=1&muted=0"
+                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
                     allowfullscreen>
                 </iframe>
             </div>
-
-            <!-- Control Buttons -->
-            <div class="video-controls">
-                <button class="btn-start" id="btnStart">
-                    ▶ تشغيل الفيديو
-                </button>
-                <button class="btn-show-pdf" id="btnShowPdf">
-                    عرض الدليل الكامل ←
-                </button>
-            </div>
-
-            <!-- Status Text -->
-            <div class="video-status" id="videoStatus">
-                الفيديو جاهز للتشغيل
-            </div>
+            <button class="btn btn-red hide" id="btnShowPdf">
+                عرض الهوية الكاملة ←
+            </button>
         </div>
 
-        <!-- Transition Message -->
-        <div class="transition-message" id="transitionMsg">
-            جاري تحميل دليل العلامة التجارية...
-        </div>
-
-        <!-- PDF Section -->
-        <div class="pdf-section" id="pdfSection">
-            <div class="pdf-header">
-                <h2>دليل العلامة التجارية الكامل</h2>
-                <p>اضغط على PDF أو استخدم التمرير للأسفل لاستكشاف جميع التفاصيل</p>
-            </div>
+        <!-- Step 3: PDF -->
+        <div class="pdf-step" id="pdfStep">
             <div class="pdf-container">
-                <div class="pdf-scroll-hint">
-                    استخدم التمرير للأسفل لاستكشاف الدليل
-                    <span>↓</span>
-                </div>
-                <iframe 
-                    src="pdf.pdf" 
-                    class="pdf-viewer"
-                    id="pdfViewer">
-                </iframe>
+                <div class="scroll-hint">مرر للأسفل لاستكشاف الدليل ↓</div>
+                <iframe src="pdf.pdf" class="pdf-viewer"></iframe>
             </div>
         </div>
+
     </div>
 
     <script>
-        // Detect Mobile Device
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                   window.innerWidth <= 768;
-        }
-
-        // Show mobile warning if needed
-        if (isMobile()) {
+        // Mobile detection
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768) {
             document.getElementById('mobileWarning').classList.add('show');
         }
 
-        // Hide loading screen
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loading').classList.add('hide');
-            }, 500);
+        // Hide loading
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('loading').classList.add('hide'), 400);
         });
 
-        // Get elements
-        const btnStart = document.getElementById('btnStart');
+        // Elements
+        const introStep = document.getElementById('introStep');
+        const videoStep = document.getElementById('videoStep');
+        const pdfStep = document.getElementById('pdfStep');
+        const btnWatch = document.getElementById('btnWatch');
         const btnShowPdf = document.getElementById('btnShowPdf');
-        const videoSection = document.getElementById('videoSection');
-        const videoStatus = document.getElementById('videoStatus');
-        const transitionMsg = document.getElementById('transitionMsg');
-        const pdfSection = document.getElementById('pdfSection');
         const vimeoPlayer = document.getElementById('vimeoPlayer');
 
-        let isVideoPlaying = false;
-
-        // Start Video Button Click
-        btnStart.addEventListener('click', function() {
-            // Hide start button
-            btnStart.classList.add('playing');
+        // Watch Button Click
+        btnWatch.addEventListener('click', () => {
+            introStep.classList.add('hide');
+            videoStep.classList.add('show');
             
-            // Update status
-            videoStatus.textContent = 'الفيديو يعمل الآن 🔊';
-            videoStatus.classList.add('show', 'playing');
-            
-            // Enable autoplay with sound by reloading iframe with autoplay parameter
-            const currentSrc = vimeoPlayer.src;
-            vimeoPlayer.src = currentSrc + '&autoplay=1';
-            
-            isVideoPlaying = true;
-            
-            // Show "Show PDF" button after 2 seconds
-            setTimeout(function() {
-                btnShowPdf.classList.add('show');
-            }, 2000);
+            // Enable autoplay with sound
+            const src = vimeoPlayer.src;
+            vimeoPlayer.src = src.includes('autoplay') ? src : src + '&autoplay=1';
         });
 
-        // Show PDF Button Click
-        btnShowPdf.addEventListener('click', function() {
-            // Hide video section
-            videoSection.classList.add('hide');
-            
-            // Show transition message
-            transitionMsg.style.display = 'block';
-            
-            // Show PDF after brief delay
-            setTimeout(function() {
-                transitionMsg.style.display = 'none';
-                pdfSection.classList.add('show');
-                
-                // Smooth scroll to PDF
-                pdfSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 1500);
-        });
-
-        // Listen for Vimeo video end event
+        // Listen for video end
         window.addEventListener('message', function(e) {
-            if (e.origin.indexOf('vimeo') > -1) {
-                var data = e.data;
-                if (data.event === 'ended' && isVideoPlaying) {
-                    // Video ended - automatically show PDF button prominently
-                    btnShowPdf.classList.add('show');
-                    videoStatus.textContent = 'انتهى الفيديو - اضغط لعرض الدليل';
-                    videoStatus.style.color = '#DC2626';
-                }
+            if (e.origin.indexOf('vimeo') > -1 && e.data.event === 'ended') {
+                btnShowPdf.classList.remove('hide');
             }
         }, false);
 
-        // Add smooth scroll behavior
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
+        // Fallback: show button after 13 seconds (11s video + 2s buffer)
+        setTimeout(() => {
+            if (!btnShowPdf.classList.contains('show')) {
+                btnShowPdf.classList.remove('hide');
+            }
+        }, 13000);
 
-        // Console log for debugging
-        console.log('Presentation loaded successfully');
-        console.log('Video: https://vimeo.com/1196801056');
-        console.log('Click "تشغيل الفيديو" to start with sound');
+        // Show PDF Button Click
+        btnShowPdf.addEventListener('click', () => {
+            videoStep.style.display = 'none';
+            pdfStep.classList.add('show');
+            pdfStep.scrollIntoView({ behavior: 'smooth' });
+        });
     </script>
-</body>
 </body>
 </html>
